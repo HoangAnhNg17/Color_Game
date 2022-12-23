@@ -1,4 +1,5 @@
 import 'package:color_game/bloc/theme.dart';
+import 'package:color_game/pages/home_page.dart';
 import 'package:color_game/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ void main() {
     debugShowCheckedModeBanner: false,
     initialRoute: "/",
     getPages: [
-      GetPage(name: "/", page: ()=> SplashPage()),
+      GetPage(name: "/", page: ()=> HomePage()),
     ],
   ));
 }

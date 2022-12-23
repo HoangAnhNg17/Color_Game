@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class GamePlay extends GetxController {
-
   SharedPreferences? sharedPreferences;
 
   RxInt level = 1.obs, crossAxisCount = 2.obs;
@@ -30,7 +29,6 @@ class GamePlay extends GetxController {
   RxBool getHighScore = false.obs;
 
   late BuildContext context;
-
 
   Future saveDataFromLocal() async {
     if (sharedPreferences == null) {
@@ -71,14 +69,14 @@ class GamePlay extends GetxController {
         second.value = second.value - 0.01;
       } else {
         gameOver = true.obs;
-        if(level.value > highScore.value){
+        if (level.value > highScore.value) {
           saveDataFromLocal();
           getDataFromLocal();
           getHighScore.value = true;
         }
-        if(getHighScore.value){
+        if (getHighScore.value) {
           showHighScoreGameDialog();
-        }else{
+        } else {
           showEndGameDialog();
         }
         timer.cancel();
@@ -93,8 +91,8 @@ class GamePlay extends GetxController {
       barrierLabel: '',
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 500),
-      transitionBuilder: (BuildContext context, Animation first, Animation second,
-          Widget child) {
+      transitionBuilder: (BuildContext context, Animation first,
+          Animation second, Widget child) {
         final curvedValue = Curves.easeInOutBack.transform(first.value) - 1.0;
         return Transform(
           transform: Matrix4.translationValues(0, curvedValue * 200, 0),
@@ -122,14 +120,22 @@ class GamePlay extends GetxController {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('Congratulations', style: TextStyle(color: Colors.red,fontSize: 20),),
+                Text(
+                  'Congratulations',
+                  style: TextStyle(color: Colors.red, fontSize: 20),
+                ),
                 Lottie.asset('assets/lottie/game-won.json', height: 399),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Your new record is : ${highScore.value}', style: TextStyle(color: Colors.white),),
-                    SizedBox(height: 20,),
+                    Text(
+                      'Your new record is : ${highScore.value}',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     ElevatedButton(
                       onPressed: () {
                         Get.back();
@@ -154,71 +160,75 @@ class GamePlay extends GetxController {
   }
 
   Future<bool?> showEndGameDialog() {
-  return showGeneralDialog<bool>(
-    context: context,
-    barrierDismissible: false,
-    barrierLabel: '',
-    barrierColor: Colors.black54,
-    transitionDuration: const Duration(milliseconds: 500),
-    transitionBuilder: (BuildContext context, Animation first, Animation second,
-        Widget child) {
-      final curvedValue = Curves.easeInOutBack.transform(first.value) - 1.0;
-      return Transform(
-        transform: Matrix4.translationValues(0, curvedValue * 200, 0),
-        child: child,
-      );
-    },
-    pageBuilder: (context, animation1, animation2) => BackdropFilter(
-      filter: ImageFilter.blur(
-        sigmaX: 5,
-        sigmaY: 5,
-      ),
-      child: Dialog(
-        backgroundColor: Colors.blueAccent.withOpacity(0.5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          side: const BorderSide(
-            color: Colors.blueAccent,
-            width: 3,
+    return showGeneralDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: '',
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 500),
+      transitionBuilder: (BuildContext context, Animation first,
+          Animation second, Widget child) {
+        final curvedValue = Curves.easeInOutBack.transform(first.value) - 1.0;
+        return Transform(
+          transform: Matrix4.translationValues(0, curvedValue * 200, 0),
+          child: child,
+        );
+      },
+      pageBuilder: (context, animation1, animation2) => BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 5,
+          sigmaY: 5,
+        ),
+        child: Dialog(
+          backgroundColor: Colors.blueAccent.withOpacity(0.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            side: const BorderSide(
+              color: Colors.blueAccent,
+              width: 3,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Lottie.asset('assets/lottie/game-over.json', height: 399),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Your score is : ${level.value}',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                        restart();
+                      },
+                      child: const Text('New Game'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Lottie.asset('assets/lottie/game-over.json', height: 399),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('Your score is : ${level.value}', style: TextStyle(color: Colors.white),),
-                  SizedBox(height: 20,),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back();
-                      restart();
-                    },
-                    child: const Text('New Game'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
       ),
-    ),
-  ).then((value) {
-    if (value == null) {
-      pauseGame.value = false;
-    } else {
-      return;
-    }
-  });
-}
-
+    ).then((value) {
+      if (value == null) {
+        pauseGame.value = false;
+      } else {
+        return;
+      }
+    });
+  }
 
   void onColorTap(int index) {
     if (!gameOver.value && index == diffIndex.value && !pauseGame.value) {

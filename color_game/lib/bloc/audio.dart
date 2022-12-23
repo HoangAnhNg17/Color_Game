@@ -17,11 +17,11 @@ class Audio extends GetxController{
     isPlaying.value ? playAudio('sound.mp3') : stopAudio('sound.mp3');
   }
 
-  void playAudio(String file) {
+  Future<void> playAudio(String file) async {
     player = AudioPlayer();
     player?.setAsset(assetSound.value + file);
     if(!audio.player!.playing) {
-      player?.play();
+       player?.play();
       if(file == 'sound.mp3'){
         player?.setLoopMode(LoopMode.one);
       }else {
@@ -31,7 +31,7 @@ class Audio extends GetxController{
   }
 
   void stopAudio(String file) async{
-    player?.setAsset(assetSound.value + file);
+    // player?.setAsset(assetSound.value + file);
     player?.stop();
   }
 

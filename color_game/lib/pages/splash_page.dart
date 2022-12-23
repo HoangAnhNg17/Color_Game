@@ -3,6 +3,7 @@ import 'package:color_game/bloc/audio.dart';
 import 'package:color_game/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     // TODO: implement initState
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(Duration(seconds: 3), (timer) {
       Get.off(()=> HomePage());
       timer.cancel();
     });
@@ -24,8 +25,9 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       body: Center(
-        child: FlutterLogo(size: 300,),
+        child: CircularProgressIndicator(),
       ),
     );
   }
